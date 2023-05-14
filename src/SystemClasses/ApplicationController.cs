@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using Train_booking.src.UserClasses;
 
 namespace  Train_booking.src.SystemClasses

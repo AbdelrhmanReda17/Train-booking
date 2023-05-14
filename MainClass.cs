@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Train_booking.src.SystemClasses;
+
 namespace Train_booking
 {
     public class MainClass
