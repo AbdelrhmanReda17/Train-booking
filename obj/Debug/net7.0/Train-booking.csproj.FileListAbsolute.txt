@@ -1,0 +1,15 @@
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.csproj.AssemblyReference.cache
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.AssemblyInfoInputs.cache
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.AssemblyInfo.cs
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.csproj.CoreCompileInputs.cache
+D:\Projects\Train-booking\bin\Debug\net7.0\Train-booking.exe
+D:\Projects\Train-booking\bin\Debug\net7.0\Train-booking.deps.json
+D:\Projects\Train-booking\bin\Debug\net7.0\Train-booking.runtimeconfig.json
+D:\Projects\Train-booking\bin\Debug\net7.0\Train-booking.dll
+D:\Projects\Train-booking\bin\Debug\net7.0\Train-booking.pdb
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.dll
+D:\Projects\Train-booking\obj\Debug\net7.0\refint\Train-booking.dll
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.pdb
+D:\Projects\Train-booking\obj\Debug\net7.0\Train-booking.genruntimeconfig.cache
+D:\Projects\Train-booking\obj\Debug\net7.0\ref\Train-booking.dll
