@@ -1,6 +1,4 @@
-namespace src.UserClasses
-{
-
+namespace Train_booking.src.UserClasses;
     public abstract  class User
     {   public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,4 +20,3 @@ namespace src.UserClasses
             return $"{FirstName} {LastName} | {Age} | {Gender} | {Email} | {Phone}";
         }
     }
-}
