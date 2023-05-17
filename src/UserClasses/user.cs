@@ -1,22 +1,23 @@
 namespace Train_booking.src.UserClasses;
     public abstract  class User
-    {   public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Gender { get; set; }
-        public int Age { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public User(string FirstName, string LastName, string Gender, int Age, string Email , string Phone)
+    {   
+        public string? name { get; set; }
+        public int? age { get; set; }
+        public string? email { get; set; }
+        public string? phone { get; set; }
+        public string? password { get; set; }
+        public string? city { get; set; }
+        public string? country { get; set; }
+
+        public User(string? name , string? password , string phone, string email, string city , int age , string country)
         {
-            this.FirstName = FirstName;
-            this.LastName = LastName;
-            this.Gender = Gender;
-            this.Age = Age;
-            this.Email = Email;
-            this.Phone = Phone;
+            this.name = name;
+            this.country = country;
+            this.age = age;
+            this.email = email;
+            this.phone = phone;
+            this.password = password;
+            this.city = city;
         }
-        public override string ToString()
-        {
-            return $"{FirstName} {LastName} | {Age} | {Gender} | {Email} | {Phone}";
-        }
+        public User(){}
     }

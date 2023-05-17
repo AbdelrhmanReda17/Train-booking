@@ -1,6 +1,13 @@
 namespace Train_booking.src.UserClasses;
 public class Customer : User{
-        public Customer(string FirstName, string LastName, string Gender, int Age, string Email , string Phone) : base(FirstName, LastName, Gender, Age, Email, Phone)
+        public int? id;
+        public Customer(){
+
+        }
+        public Customer(string name , string password , string phone, string email, string city , int age , string country) : base(name ,password,phone , email, city, age, country){
+        }
+        public override string ToString()
         {
+            return $"{name} | {password} | {phone} | {email} | {city} | {age} | {country}";
         }
 }

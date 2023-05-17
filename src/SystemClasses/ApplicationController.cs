@@ -1,20 +1,43 @@
 using System;
 using System.Data.SqlClient;
 using Train_booking.src.UserClasses;
+using Train_booking.src.SystemController;
 
 namespace  Train_booking.src.SystemClasses
 {
     public class ApplicationController
     {
+        public UserController usercontroller = new UserController();
         public void Start()
         {
-            Console.WriteLine("APPLICATION START");
-
-            User user = new Customer("John", "Doe", "Male", 30, "johndoe@email.com", "01270953626");
-
-            Console.WriteLine(user.ToString());
-
-            Console.WriteLine("APPLICATION END");
+            while(true)
+            {
+                Console.WriteLine("Welcome to Train-Booking ");
+                Console.WriteLine(" 1. Login ");
+                Console.WriteLine(" 2. Register ");
+                Console.WriteLine(" 0. Exit");
+                Console.WriteLine("Please Select one of options : ");
+                string input = Console.ReadLine();
+                int number;
+                if(!string.IsNullOrEmpty(input) && int.TryParse(input, out number)){
+                    if(number == 1){
+                        usercontroller.LoginInterface();
+                    }else if(number == 2){
+                        usercontroller.RegisterInterface();
+                    }else if (number ==0){
+                        Console.WriteLine("Thanks");
+                        break;
+                    }
+                }else{
+                    Console.WriteLine("Please Select one of options : ");
+                }
+            }
+            // DataManager data = new DataManager();
+            // Customer ct = data.loadCustomer("Hazem 1Amr" , "password123");
+            // if(ct != null)
+            //     Console.WriteLine(ct);
+            // else
+            //     Console.WriteLine("Customer not found");
         }
     }
 }
