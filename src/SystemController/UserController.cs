@@ -10,6 +10,7 @@ namespace Train_booking.src.SystemController {
 
         public void RegisterInterface() {
             string name = string.Empty;
+            string username = string.Empty;
             string password = string.Empty;
             string email = string.Empty;
             string phone = string.Empty;
@@ -17,6 +18,8 @@ namespace Train_booking.src.SystemController {
             string country = string.Empty;
 
             if (!TakeInputString(ref name, "Name")) return;
+
+            if (!TakeInputString(ref username, "Username")) return;
 
             if (!TakeInputString(ref password, "Password")) return;
 
@@ -29,12 +32,12 @@ namespace Train_booking.src.SystemController {
             if (!TakeInputString(ref country, "Country")) return;
 
             int age;
-            Console.WriteLine("Please enter your Age :  ");
+            Console.Write("Please enter your Age : ");
             while (!int.TryParse(Console.ReadLine(), out age)) {
                 Console.Write("Please enter vaild Age: ");
             }
 
-            Customer ct = new Customer(name, password, phone, email, city, age, country);
+            Customer ct = new Customer(username,name, password, phone, email, city, age, country);
             Data.AddCustomer(ct);
         }
 
@@ -67,14 +70,14 @@ namespace Train_booking.src.SystemController {
         }
 
         public void CustomerInterface() {
-            string name = string.Empty;
+            string username = string.Empty;
             string password = string.Empty;
 
-            if (!TakeInputString(ref name, "Name")) return;
+            if (!TakeInputString(ref username, "Username")) return;
 
             if (!TakeInputString(ref password, "Password")) return;
 
-            Customer? customer = Data.GetCustomer(name, password);
+            Customer? customer = Data.GetCustomer(username, password);
 
             if (customer == null) {
                 Console.WriteLine("Customer not Found or wrong password!");
@@ -85,14 +88,14 @@ namespace Train_booking.src.SystemController {
         }
 
         public void AdminInterface() {
-            string name = string.Empty;
+            string username = string.Empty;
             string password = string.Empty;
 
-            if (!TakeInputString(ref name, "Name")) return;
+            if (!TakeInputString(ref username, "Username")) return;
 
             if (!TakeInputString(ref password, "Password")) return;
 
-            Admin? admin = Data.GetAdmin(name, password);
+            Admin? admin = Data.GetAdmin(username, password);
 
             if (admin == null) {
                 Console.WriteLine("Admin not Found or wrong password!");
@@ -111,7 +114,6 @@ namespace Train_booking.src.SystemController {
                 Console.Write($"Please enter your {strname} (Enter 0 to Cancel): ");
                 temp = Console.ReadLine();
             }
-
             if (temp == "0") {
                 Console.WriteLine("Process Canceled!");
                 return false;

@@ -4,7 +4,7 @@ public class Customer : User{
         public Customer(){
 
         }
-        public Customer(string name , string password , string phone, string email, string city , int age , string country) : base(name ,password,phone , email, city, age, country){
+        public Customer(string username , string name , string password , string phone, string email, string city , int age , string country) : base(username,name ,password,phone , email, city, age, country){
         }
         public override string ToString()
         {
