@@ -1,9 +1,8 @@
 using System;
 using System.Data.SqlClient;
 using Train_booking.src.UserClasses;
-using Train_booking.src.SystemController;
 
-namespace Train_booking.src.SystemClasses {
+namespace Train_booking.src.SystemController {
     public class ApplicationController {
         public UserController usercontroller = new UserController();
         public void Start() {
@@ -31,11 +30,6 @@ namespace Train_booking.src.SystemClasses {
                 }
             } while (number != 0);
         }
-        // DataManager data = new DataManager();
-        // Customer ct = data.loadCustomer("Hazem 1Amr" , "password123");
-        // if(ct != null)
-        //     Console.WriteLine(ct);
-        // else
-        //     Console.WriteLine("Customer not found");
+
     }
 }
