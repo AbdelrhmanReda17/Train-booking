@@ -114,12 +114,12 @@ namespace Train_booking.src.SystemController {
             do {
             Console.WriteLine("------------------------------------------------");
             Console.WriteLine("Hello " + Admin.name);
-            Console.WriteLine(" 1. Add a Trip");
+            Console.WriteLine(" 1. Apdd a Trip");
             Console.WriteLine(" 2. Remove a Trip");
             Console.WriteLine(" 3. Add a Train");
             Console.WriteLine(" 4. Remove a Train");
-        //Console.WriteLine(" 5. Edit a Customer");
-        //Console.WriteLine(" 5. Remove a Customer");
+            //Console.WriteLine(" 5. Edit a Customer");
+            //Console.WriteLine(" 5. Remove a Customer");
             Console.WriteLine(" 0. log out");
             Console.WriteLine("------------------------------------------------");
             Console.Write("Please select which detail you want to change : ");

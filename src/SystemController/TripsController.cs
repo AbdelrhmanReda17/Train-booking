@@ -77,6 +77,8 @@ namespace Train_booking.src.SystemController
                     Console.WriteLine("Invaild input please enter again: ");
                     int.TryParse(Console.ReadLine(), out number);
                 }
+                // Data.returnSeats
+                // Data.removebooking
                 Data.RemoveTrip(lst[number-1].trip_id);
             }
         }

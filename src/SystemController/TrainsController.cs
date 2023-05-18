@@ -22,6 +22,7 @@ namespace Train_booking.src.SystemController
                     Console.WriteLine("Invaild input please enter again: ");
                     int.TryParse(Console.ReadLine(), out number);
                 }
+                //Data.AddSeats()
                 Data.AddTrain(number);
         }
             public void RemoveTrain(){
@@ -45,19 +46,21 @@ namespace Train_booking.src.SystemController
                         Console.WriteLine("Invaild input please enter again: ");
                         int.TryParse(Console.ReadLine(), out number);
                     }
-                    if(!Data.CheckTrain(lst[number-1].train_id)){
-                        Console.WriteLine("Please enter anthor Train id to replace it into [booking/trip] ( 0 to cancel ) :");
-                        int.TryParse(Console.ReadLine(), out replace);
-                        while(replace <= 0 || number > lst.Count || replace == number){
-                            if(replace == 0) {
-                                Console.WriteLine("Operation Canceled");
-                                return;
-                            }
-                            Console.WriteLine("Invaild input please enter again: ");
-                            int.TryParse(Console.ReadLine(), out number);
-                        }
-                        Data.replaceTrain(lst[number-1].train_id ,lst[replace-1].train_id);
-                    }
+                    // if(!Data.CheckTrain(lst[number-1].train_id)){
+                    //     Console.WriteLine("Please enter anthor Train id to replace it into [booking/trip] ( 0 to cancel ) :");
+                    //     int.TryParse(Console.ReadLine(), out replace);
+                    //     while(replace <= 0 || number > lst.Count || replace == number){
+                    //         if(replace == 0) {
+                    //             Console.WriteLine("Operation Canceled");
+                    //             return;
+                    //         }
+                    //         Console.WriteLine("Invaild input please enter again: ");
+                    //         int.TryParse(Console.ReadLine(), out number);
+                    //     }
+                    //     Data.replaceTrain(lst[number-1].train_id ,lst[replace-1].train_id);
+                    // }
+                    // Data.Remove Booking/trip();
+                    // Data.RemoveSeats();
                     Data.RemoveTrain(lst[number-1].train_id);
                 }
                 else{
