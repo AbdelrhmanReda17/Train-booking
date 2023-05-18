@@ -17,8 +17,8 @@ namespace  Train_booking.src.SystemClasses
                 Console.WriteLine(" 2. Register ");
                 Console.WriteLine(" 0. Exit");
                 Console.WriteLine("Please Select one of options : ");
-                string input = Console.ReadLine();
                 int number;
+                string input = Console.ReadLine() ?? "";
                 if(!string.IsNullOrEmpty(input) && int.TryParse(input, out number)){
                     if(number == 1){
                         usercontroller.LoginInterface();

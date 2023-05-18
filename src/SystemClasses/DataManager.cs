@@ -5,7 +5,7 @@ namespace Train_booking.src.SystemClasses
 {
     public class DataManager
     {        
-        public Customer getCustomer(string name , string password){
+        public Customer? getCustomer(string name , string password){
             string str = "Server = ABDELRHMAN\\SQLEXPRESS; Initial Catalog = Train-Booking; Integrated Security = true;";
             SqlConnection con = new SqlConnection(str);
             con.Open();
@@ -16,11 +16,11 @@ namespace Train_booking.src.SystemClasses
                     c.name = reader.GetValue(1).ToString();
                     c.password = reader.GetValue(2).ToString();
                     if(c.name == name && c.password == password){
-                        c.id = int.Parse(reader.GetValue(0).ToString());
+                        c.id = reader.GetInt32(0);
                         c.phone = reader.GetValue(3).ToString();
                         c.email = reader.GetValue(4).ToString();
                         c.city = reader.GetValue(5).ToString();
-                        c.age = int.Parse(reader.GetValue(6).ToString());
+                        c.age = reader.GetInt32(6);
                         c.country = reader.GetValue(7).ToString();
                         return c;
                     }
@@ -28,7 +28,7 @@ namespace Train_booking.src.SystemClasses
             }
             return null;
         }
-        public Admin getAdmin(string name , string password){
+        public Admin? getAdmin(string name , string password){
             string str = "Server = ABDELRHMAN\\SQLEXPRESS; Initial Catalog = Train-Booking; Integrated Security = true;";
             SqlConnection con = new SqlConnection(str);
             con.Open();
@@ -39,7 +39,7 @@ namespace Train_booking.src.SystemClasses
                     c.name = reader.GetValue(1).ToString();
                     c.password = reader.GetValue(2).ToString();
                     if(c.name == name && c.password == password){
-                        c.id = int.Parse(reader.GetValue(0).ToString());
+                        c.id = reader.GetInt32(0);
                         c.position = reader.GetValue(5).ToString();
                         c.phone = reader.GetValue(3).ToString();
                         c.email = reader.GetValue(4).ToString();

@@ -97,7 +97,7 @@ namespace Train_booking.src.SystemController
                 Console.WriteLine("Please Enter vaild Password :  ");
                 password = Console.ReadLine();
             }
-            Customer ct = Data.getCustomer(name , password);
+            Customer? ct = Data.getCustomer(name , password);
             if(ct != null){
                     Console.WriteLine(ct.ToString());
             }else{
@@ -117,7 +117,7 @@ namespace Train_booking.src.SystemController
                 Console.WriteLine("Please Enter Invaild Password :  ");
                 password = Console.ReadLine();
             }
-            Admin ct = Data.getAdmin(name , password );
+            Admin? ct = Data.getAdmin(name , password );
             if(ct != null){
                     Console.WriteLine(ct.ToString());
             }else{
