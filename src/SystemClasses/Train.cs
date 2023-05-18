@@ -9,11 +9,12 @@ namespace Train_booking.src.SystemClasses
     {
         public int train_id;
         public int total_seats;
-        public Train(int train_id , int total_seats){
+        public Train(int total_seats){
             this.total_seats = total_seats;
-            this.train_id = train_id;
         }
-
+        public override string ToString() {
+            return $"{train_id} | {total_seats}";
+        }
         
     }
 }

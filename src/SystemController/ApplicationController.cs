@@ -8,10 +8,12 @@ namespace Train_booking.src.SystemController {
         public void Start() {
             int number;
             do {
+                Console.WriteLine("------------------------------------------------");
                 Console.WriteLine("Welcome to Train-Booking ");
                 Console.WriteLine(" 1. Login ");
                 Console.WriteLine(" 2. Register ");
                 Console.WriteLine(" 0. Exit");
+                Console.WriteLine("------------------------------------------------");
                 Console.Write("Please Select one of options: ");
                 int.TryParse(Console.ReadLine(), out number);
                 switch (number) {
