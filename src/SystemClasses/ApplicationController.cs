@@ -3,41 +3,39 @@ using System.Data.SqlClient;
 using Train_booking.src.UserClasses;
 using Train_booking.src.SystemController;
 
-namespace  Train_booking.src.SystemClasses
-{
-    public class ApplicationController
-    {
+namespace Train_booking.src.SystemClasses {
+    public class ApplicationController {
         public UserController usercontroller = new UserController();
-        public void Start()
-        {
-            while(true)
-            {
+        public void Start() {
+            int number;
+            do {
                 Console.WriteLine("Welcome to Train-Booking ");
                 Console.WriteLine(" 1. Login ");
                 Console.WriteLine(" 2. Register ");
                 Console.WriteLine(" 0. Exit");
-                Console.WriteLine("Please Select one of options : ");
-                int number;
-                string input = Console.ReadLine() ?? "";
-                if(!string.IsNullOrEmpty(input) && int.TryParse(input, out number)){
-                    if(number == 1){
+                Console.Write("Please Select one of options: ");
+                int.TryParse(Console.ReadLine(), out number);
+                switch (number) {
+                    case 1:
                         usercontroller.LoginInterface();
-                    }else if(number == 2){
-                        usercontroller.RegisterInterface();
-                    }else if (number ==0){
-                        Console.WriteLine("Thanks");
                         break;
-                    }
-                }else{
-                    Console.WriteLine("Please Select one of options : ");
+                    case 2:
+                        usercontroller.RegisterInterface();
+                        break;
+                    case 0:
+                        Console.WriteLine("Closing Program! Thanks for using!");
+                        break;
+                    default:
+                        Console.WriteLine("Please Select a valid input!");
+                        break;
                 }
-            }
-            // DataManager data = new DataManager();
-            // Customer ct = data.loadCustomer("Hazem 1Amr" , "password123");
-            // if(ct != null)
-            //     Console.WriteLine(ct);
-            // else
-            //     Console.WriteLine("Customer not found");
+            } while (number != 0);
         }
+        // DataManager data = new DataManager();
+        // Customer ct = data.loadCustomer("Hazem 1Amr" , "password123");
+        // if(ct != null)
+        //     Console.WriteLine(ct);
+        // else
+        //     Console.WriteLine("Customer not found");
     }
 }

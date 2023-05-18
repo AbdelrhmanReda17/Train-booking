@@ -4,126 +4,121 @@ using System.Linq;
 using System.Threading.Tasks;
 using Train_booking.src.SystemClasses;
 using Train_booking.src.UserClasses;
-namespace Train_booking.src.SystemController
-{
-    public class UserController 
-    {
+namespace Train_booking.src.SystemController {
+    public class UserController {
         public DataManager Data = new DataManager();
-        public UserController()
-        {
-        }
-        public void RegisterInterface(){
-            Console.WriteLine("Please enter your name : ");
-            string? name = Console.ReadLine();
-            while(string.IsNullOrEmpty(name)){
-                Console.WriteLine("Please Enter vaild Name :  ");
-                name = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your password :  ");
-            string? password = Console.ReadLine();
-            while(string.IsNullOrEmpty(password)){
-                Console.WriteLine("Please Enter vaild password :  ");
-                password = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your email :  ");
-            string? email = Console.ReadLine();
-            while(string.IsNullOrEmpty(email)){
-                Console.WriteLine("Please Enter vaild Email :  ");
-                email = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your phone number :  ");
-            string? phone = Console.ReadLine();
-            while(string.IsNullOrEmpty(phone)){
-                Console.WriteLine("Please Enter vaild phone number :  ");
-                phone = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your city :  ");
-            string? city = Console.ReadLine();
-            while(string.IsNullOrEmpty(city)){
-                Console.WriteLine("Please Enter vaild city :  ");
-                city = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your country :  ");
-            string? country = Console.ReadLine();
-            while(string.IsNullOrEmpty(country)){
-                Console.WriteLine("Please Enter vaild country :  ");
-                country = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your Age :  ");
+
+        public void RegisterInterface() {
+            string name = string.Empty;
+            string password = string.Empty;
+            string email = string.Empty;
+            string phone = string.Empty;
+            string city = string.Empty;
+            string country = string.Empty;
+
+            if (!TakeInputString(ref name, "Name")) return;
+
+            if (!TakeInputString(ref password, "Password")) return;
+
+            if (!TakeInputString(ref email, "Email")) return;
+
+            if (!TakeInputString(ref phone, "Phone Number")) return;
+
+            if (!TakeInputString(ref city, "City")) return;
+
+            if (!TakeInputString(ref country, "Country")) return;
+
             int age;
-            string? input = Console.ReadLine();
-            while (!int.TryParse(input, out age)){
-                Console.WriteLine("Please enter vaild Age:");
-                input = Console.ReadLine();
+            Console.WriteLine("Please enter your Age :  ");
+            while (!int.TryParse(Console.ReadLine(), out age)) {
+                Console.Write("Please enter vaild Age: ");
             }
-            Customer ct = new Customer(name , password , phone , email,city,age , country);
-            Data.addCustomer(ct);
+
+            Customer ct = new Customer(name, password, phone, email, city, age, country);
+            Data.AddCustomer(ct);
         }
-        public void LoginInterface()
-        {
-            Console.WriteLine("Login as:");
-            Console.WriteLine(" 1. Customer");
-            Console.WriteLine(" 2. Admin");
-            Console.WriteLine(" 0. Exit");
-            Console.WriteLine("Please Select one of options : ");
+
+        public void LoginInterface() {
             int number;
-            string? input = Console.ReadLine();
-            while (!int.TryParse(input, out number)){
-                Console.WriteLine("Please enter a valid choice:");
-                input = Console.ReadLine();
-            }
-            if (number == 1){
-                CustomerInterface();
-            }
-            else if (number == 2){
-                AdminInterface();
-            }
-            else
-            {
+            do {
+                Console.WriteLine("Login as:");
+                Console.WriteLine(" 1. Customer");
+                Console.WriteLine(" 2. Admin");
+                Console.WriteLine(" 0. Go Back");
+                Console.Write("Please Select one of options : ");
+
+                int.TryParse(Console.ReadLine(), out number);
+
+                switch (number) {
+                    case 1:
+                        CustomerInterface();
+                        break;
+                    case 2:
+                        AdminInterface();
+                        break;
+                    case 0:
+                        Console.WriteLine("Login Canceled!");
+                        break;
+                    default:
+                        Console.WriteLine("Please Select a valid input!");
+                        break;
+                }
+            } while (number != 0);
+        }
+
+        public void CustomerInterface() {
+            string name = string.Empty;
+            string password = string.Empty;
+
+            if (!TakeInputString(ref name, "Name")) return;
+
+            if (!TakeInputString(ref password, "Password")) return;
+
+            Customer? customer = Data.GetCustomer(name, password);
+
+            if (customer == null) {
+                Console.WriteLine("Customer not Found or wrong password!");
                 return;
             }
-        }
-        public void CustomerInterface(){
 
-            Console.WriteLine("Please enter your name : ");
-            string? name = Console.ReadLine();
-            while(string.IsNullOrEmpty(name)){
-                Console.WriteLine("Please Enter vaild Name :  ");
-                name = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your Password :  ");
-            string? password = Console.ReadLine();
-            while(string.IsNullOrEmpty(password)){
-                Console.WriteLine("Please Enter vaild Password :  ");
-                password = Console.ReadLine();
-            }
-            Customer? ct = Data.getCustomer(name , password);
-            if(ct != null){
-                    Console.WriteLine(ct.ToString());
-            }else{
-                    Console.WriteLine("Customer not Found or wrong password !");
-            }
-        }
-        public void AdminInterface(){
-            Console.WriteLine("Please enter your name : ");
-            string? name = Console.ReadLine();
-            while(string.IsNullOrEmpty(name)){
-                Console.WriteLine("Please Enter Invaild Name :  ");
-                name = Console.ReadLine();
-            }
-            Console.WriteLine("Please enter your Password :  ");
-            string? password = Console.ReadLine();
-            while(string.IsNullOrEmpty(password)){
-                Console.WriteLine("Please Enter Invaild Password :  ");
-                password = Console.ReadLine();
-            }
-            Admin? ct = Data.getAdmin(name , password );
-            if(ct != null){
-                    Console.WriteLine(ct.ToString());
-            }else{
-                    Console.WriteLine("Admin not Found or wrong password !");
-            }
+            Console.WriteLine(customer.ToString());
         }
 
+        public void AdminInterface() {
+            string name = string.Empty;
+            string password = string.Empty;
+
+            if (!TakeInputString(ref name, "Name")) return;
+
+            if (!TakeInputString(ref password, "Password")) return;
+
+            Admin? admin = Data.GetAdmin(name, password);
+
+            if (admin == null) {
+                Console.WriteLine("Admin not Found or wrong password!");
+                return;
+            }
+
+            Console.WriteLine(admin.ToString());
+        }
+
+        private bool TakeInputString(ref string str, string strname) {
+            string? temp;
+            Console.Write($"Please enter your {strname} (Enter 0 to Cancel): ");
+            temp = Console.ReadLine();
+            while (string.IsNullOrEmpty(temp)) {
+                Console.WriteLine("Please Enter a valid input!");
+                Console.Write($"Please enter your {strname} (Enter 0 to Cancel): ");
+                temp = Console.ReadLine();
+            }
+
+            if (temp == "0") {
+                Console.WriteLine("Process Canceled!");
+                return false;
+            }
+
+            str = temp;
+            return true;
+        }
     }
 }

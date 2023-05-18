@@ -1,6 +1,6 @@
 namespace Train_booking.src.UserClasses;
 public class Customer : User{
-        public int? id;
+        public int id { get; set; }
         public Customer(){
 
         }
