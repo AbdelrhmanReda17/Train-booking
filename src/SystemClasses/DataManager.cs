@@ -36,7 +36,7 @@ namespace Train_booking.src.SystemClasses {
             using (SqlConnection connection = new SqlConnection(connectionString)) {
                 connection.Open();
                 string updateCustomerQuery = "UPDATE CUSTOMER SET name = @name, password = @password, email = @email, "
-                    + "phone_number = @phone, country = @country, city = @city WHERE username = @username";
+                    + $"phone_number = @phone, country = @country, city = @city WHERE username = {customer.username}";
                 using (SqlCommand command = new SqlCommand(updateCustomerQuery, connection)) {
                     command.Parameters.AddWithValue("@name", customer.name);
                     command.Parameters.AddWithValue("@password", customer.password);
@@ -44,7 +44,6 @@ namespace Train_booking.src.SystemClasses {
                     command.Parameters.AddWithValue("@phone", customer.phone);
                     command.Parameters.AddWithValue("@country", customer.country);
                     command.Parameters.AddWithValue("@city", customer.city);
-                    command.Parameters.AddWithValue("@username", customer.username);
                     int result = command.ExecuteNonQuery();
                     if (result < 0) {
                         Console.WriteLine("Error updating data in the database!");
@@ -133,7 +132,7 @@ namespace Train_booking.src.SystemClasses {
             con.Close();
         }
 
-        public Boolean CheckTrain(int ts) {
+        public bool CheckTrain(int ts) {
             string str = "Server = ABDELRHMAN\\SQLEXPRESS; Initial Catalog = Train-Booking; Integrated Security = true;";
             SqlConnection con = new SqlConnection(str);
             con.Open();

@@ -91,16 +91,20 @@ namespace Train_booking.src.SystemController {
                 Console.WriteLine("------------------------------------------------");
                 Console.WriteLine(" 1. Book a Trip");
                 Console.WriteLine(" 2. Update Profile");
+                Console.WriteLine(" 3. Update Dependents");
                 Console.WriteLine(" 0. log out");
                 Console.WriteLine("------------------------------------------------");
                 Console.Write(" Please select which detail you want to change : ");
                 int.TryParse(Console.ReadLine(), out number);
                 switch (number) {
                     case 1:
-                        // Booking();
+                        BookingInterface(customer);
                         break;
                     case 2:
                         ChangeDetails(customer);
+                        break;
+                    case 3:
+                        UpdateDependents(customer);
                         break;
                     case 0:
                         Console.WriteLine("Log out Successfully");
@@ -167,6 +171,10 @@ namespace Train_booking.src.SystemController {
             } while (number != 0);
         }
 
+        private void BookingInterface(Customer customer) {
+            throw new NotImplementedException();
+        }
+
         public void ChangeDetails(Customer customer) {
             string change = string.Empty;
             int choice;
@@ -208,15 +216,24 @@ namespace Train_booking.src.SystemController {
                         customer.country = change;
                         break;
                     case 0:
-                        Data.UpdateCustomer(customer);
+                        Console.WriteLine("Changes Saved Successfully!");
                         break;
                     default:
                         Console.WriteLine("Invalid Input! Please Try Again!");
                         break;
                 }
             } while (choice != 0);
+
+            // Update Database
+            if(change != string.Empty) {
+                Data.UpdateCustomer(customer);
+            }
         }
 
+        private void UpdateDependents(Customer customer) {
+            throw new NotImplementedException();
+        }
+        
         private bool TakeInputString(ref string str, string strname) {
             string? temp;
             Console.Write($"Please enter your {strname} (Enter 0 to Cancel): ");
