@@ -9,6 +9,7 @@ namespace Train_booking.src.SystemController {
         public DataManager Data = new DataManager();
         public TrainsController trainsController = new TrainsController();
         public TripsController tripsController = new TripsController();
+
         public void RegisterInterface() {
             string name = string.Empty;
             string username = string.Empty;
@@ -38,7 +39,7 @@ namespace Train_booking.src.SystemController {
                 Console.Write("Please enter vaild Age: ");
             }
 
-            Customer ct = new Customer(username,name, password, phone, email, city, age, country);
+            Customer ct = new Customer(username, name, password, phone, email, city, age, country);
             Data.AddCustomer(ct);
         }
 
@@ -81,24 +82,25 @@ namespace Train_booking.src.SystemController {
                 Console.WriteLine("Customer not Found or wrong password!");
                 return;
             }
-            CustomerInterface(ref customer);
+            CustomerInterface(customer);
         }
-        public void CustomerInterface(ref Customer customer){
-            int number ;
+
+        public void CustomerInterface(Customer customer) {
+            int number;
             do {
-            Console.WriteLine("------------------------------------------------");
-            Console.WriteLine(" 1. Book a Trip");
-            Console.WriteLine(" 2. Change your details");
-            Console.WriteLine(" 0. log out");
-            Console.WriteLine("------------------------------------------------");
-            Console.Write(" Please select which detail you want to change : ");
-            int.TryParse(Console.ReadLine(), out number);
-            switch (number) {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine(" 1. Book a Trip");
+                Console.WriteLine(" 2. Update Profile");
+                Console.WriteLine(" 0. log out");
+                Console.WriteLine("------------------------------------------------");
+                Console.Write(" Please select which detail you want to change : ");
+                int.TryParse(Console.ReadLine(), out number);
+                switch (number) {
                     case 1:
-                       // Booking();
+                        // Booking();
                         break;
                     case 2:
-                        ChangeDetails(ref customer);
+                        ChangeDetails(customer);
                         break;
                     case 0:
                         Console.WriteLine("Log out Successfully");
@@ -109,22 +111,40 @@ namespace Train_booking.src.SystemController {
                 }
             } while (number != 0);
         }
-        public void AdminInterface(ref Admin Admin){
-            int number ;
+
+        public void AdminLogin() {
+            string username = string.Empty;
+            string password = string.Empty;
+
+            if (!TakeInputString(ref username, "Username")) return;
+
+            if (!TakeInputString(ref password, "Password")) return;
+
+            Admin? admin = Data.GetAdmin(username, password);
+
+            if (admin == null) {
+                Console.WriteLine("Admin not Found or wrong password!");
+                return;
+            }
+            AdminInterface(admin);
+        }
+
+        public void AdminInterface(Admin Admin) {
+            int number;
             do {
-            Console.WriteLine("------------------------------------------------");
-            Console.WriteLine("Hello " + Admin.name);
-            Console.WriteLine(" 1. Apdd a Trip");
-            Console.WriteLine(" 2. Remove a Trip");
-            Console.WriteLine(" 3. Add a Train");
-            Console.WriteLine(" 4. Remove a Train");
-            //Console.WriteLine(" 5. Edit a Customer");
-            //Console.WriteLine(" 5. Remove a Customer");
-            Console.WriteLine(" 0. log out");
-            Console.WriteLine("------------------------------------------------");
-            Console.Write("Please select which detail you want to change : ");
-            int.TryParse(Console.ReadLine(), out number);
-            switch (number) {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Hello " + Admin.name);
+                Console.WriteLine(" 1. Apdd a Trip");
+                Console.WriteLine(" 2. Remove a Trip");
+                Console.WriteLine(" 3. Add a Train");
+                Console.WriteLine(" 4. Remove a Train");
+                //Console.WriteLine(" 5. Edit a Customer");
+                //Console.WriteLine(" 6. Remove a Customer");
+                Console.WriteLine(" 0. log out");
+                Console.WriteLine("------------------------------------------------");
+                Console.Write("Please select which detail you want to change: ");
+                int.TryParse(Console.ReadLine(), out number);
+                switch (number) {
                     case 1:
                         tripsController.Addtrip();
                         break;
@@ -146,10 +166,11 @@ namespace Train_booking.src.SystemController {
                 }
             } while (number != 0);
         }
-        public void ChangeDetails(ref Customer customer){
+
+        public void ChangeDetails(Customer customer) {
             string change = string.Empty;
             int choice;
-            do{
+            do {
                 Console.WriteLine("------------------------------------------------");
                 Console.WriteLine(" 1. Name");
                 Console.WriteLine(" 2. Password");
@@ -159,7 +180,7 @@ namespace Train_booking.src.SystemController {
                 Console.WriteLine(" 6. Country");
                 Console.WriteLine(" 0. Exit and save");
                 Console.WriteLine("------------------------------------------------");
-                Console.Write(" Please select which detail you want to change : ");
+                Console.Write(" Please select which detail you want to change: ");
                 int.TryParse(Console.ReadLine(), out choice);
                 switch (choice) {
                     case 1:
@@ -185,30 +206,15 @@ namespace Train_booking.src.SystemController {
                     case 6:
                         if (!TakeInputString(ref change, "country")) break;
                         customer.country = change;
-                        break;                      
+                        break;
                     case 0:
                         Data.UpdateCustomer(customer);
                         break;
                     default:
+                        Console.WriteLine("Invalid Input! Please Try Again!");
                         break;
                 }
-            }while(choice != 0);
-        }
-        public void AdminLogin() {
-            string username = string.Empty;
-            string password = string.Empty;
-
-            if (!TakeInputString(ref username, "Username")) return;
-
-            if (!TakeInputString(ref password, "Password")) return;
-
-            Admin? admin = Data.GetAdmin(username, password);
-
-            if (admin == null) {
-                Console.WriteLine("Admin not Found or wrong password!");
-                return;
-            }
-           AdminInterface(ref admin);
+            } while (choice != 0);
         }
 
         private bool TakeInputString(ref string str, string strname) {

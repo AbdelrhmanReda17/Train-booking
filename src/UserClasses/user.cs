@@ -10,7 +10,7 @@ public abstract class User {
     public string? country { get; set; }
 
     public User() { }
-    public User(string username,string name, string password, string phone, string email, string city, int age, string country) {
+    public User(string username, string name, string password, string phone, string email, string city, int age, string country) {
         this.username = username;
         this.name = name;
         this.country = country;
