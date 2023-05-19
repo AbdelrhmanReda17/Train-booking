@@ -359,5 +359,9 @@ namespace Train_booking.src.SystemClasses {
             }
             con.Close();
         }
+    
+        public List<int> GetAvailableSeats(int trip_id) {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -52,7 +52,7 @@ namespace Train_booking.src.SystemController {
                 Console.WriteLine("2. Admin");
                 Console.WriteLine("0. Go Back");
                 Console.WriteLine("------------------------------------------------");
-                Console.Write("Please Select one of options : ");
+                Console.Write("Please Select one of options: ");
                 int.TryParse(Console.ReadLine(), out number);
 
                 switch (number) {
@@ -89,12 +89,13 @@ namespace Train_booking.src.SystemController {
             int number;
             do {
                 Console.WriteLine("------------------------------------------------");
-                Console.WriteLine(" 1. Book a Trip");
-                Console.WriteLine(" 2. Update Profile");
-                Console.WriteLine(" 3. Update Dependents");
-                Console.WriteLine(" 0. log out");
+                Console.WriteLine("Hello " + customer.name);
+                Console.WriteLine("1. Book a Trip");
+                Console.WriteLine("2. Update Profile");
+                Console.WriteLine("3. Update Dependents");
+                Console.WriteLine("0. log out");
                 Console.WriteLine("------------------------------------------------");
-                Console.Write(" Please select which detail you want to change : ");
+                Console.Write("Please select which detail you want to change: ");
                 int.TryParse(Console.ReadLine(), out number);
                 switch (number) {
                     case 1:
@@ -133,18 +134,18 @@ namespace Train_booking.src.SystemController {
             AdminInterface(admin);
         }
 
-        public void AdminInterface(Admin Admin) {
+        public void AdminInterface(Admin admin) {
             int number;
             do {
                 Console.WriteLine("------------------------------------------------");
-                Console.WriteLine("Hello " + Admin.name);
-                Console.WriteLine(" 1. Apdd a Trip");
-                Console.WriteLine(" 2. Remove a Trip");
-                Console.WriteLine(" 3. Add a Train");
-                Console.WriteLine(" 4. Remove a Train");
-                //Console.WriteLine(" 5. Edit a Customer");
-                //Console.WriteLine(" 6. Remove a Customer");
-                Console.WriteLine(" 0. log out");
+                Console.WriteLine("Hello " + admin.name);
+                Console.WriteLine("1. Add a Trip");
+                Console.WriteLine("2. Remove a Trip");
+                Console.WriteLine("3. Add a Train");
+                Console.WriteLine("4. Remove a Train");
+                //Console.WriteLine("5. Edit a Customer");
+                //Console.WriteLine("6. Remove a Customer");
+                Console.WriteLine("0. log out");
                 Console.WriteLine("------------------------------------------------");
                 Console.Write("Please select which detail you want to change: ");
                 int.TryParse(Console.ReadLine(), out number);
@@ -172,7 +173,42 @@ namespace Train_booking.src.SystemController {
         }
 
         private void BookingInterface(Customer customer) {
-            throw new NotImplementedException();
+            int number;
+            List<Trip> tripList = Data.GetTrips();
+            if (tripList.Count <= 0 || tripList == null) {
+                Console.WriteLine("No Available Trips!");
+                return;
+            }
+
+            // Available trips
+            Console.WriteLine("------------------------------------------------");
+            int i = 1;
+            foreach (Trip trip in tripList) {
+                Console.WriteLine($"{i++}) " + trip.ToString());
+            }
+            Console.WriteLine("0. Cancel Booking");
+            Console.WriteLine("------------------------------------------------");
+            Console.Write("Please select Trip you want to Book: ");
+            
+            while (!int.TryParse(Console.ReadLine(), out number) || number < 0 || number > tripList.Count) {
+                Console.Write("Please Select a Valid Trip: ");
+            }
+
+            if(number == 0) {
+                Console.WriteLine("Booking Canceled!");
+                return;
+            }
+
+            List<int> availableSeats = Data.GetAvailableSeats(tripList[number - 1].trip_id);
+            if (availableSeats.Count <= 0 || availableSeats == null) {
+                Console.WriteLine("No Available Seats for this Trip!");
+                return;
+            }
+
+            // Avaiable Seats for Trip
+            // foreach(int seatno in availableSeats) {
+            //     Console.WriteLine($"| {seatno} |");
+            // }
         }
 
         public void ChangeDetails(Customer customer) {
@@ -225,7 +261,7 @@ namespace Train_booking.src.SystemController {
             } while (choice != 0);
 
             // Update Database
-            if(change != string.Empty) {
+            if (change != string.Empty) {
                 Data.UpdateCustomer(customer);
             }
         }
@@ -233,7 +269,7 @@ namespace Train_booking.src.SystemController {
         private void UpdateDependents(Customer customer) {
             throw new NotImplementedException();
         }
-        
+
         private bool TakeInputString(ref string str, string strname) {
             string? temp;
             Console.Write($"Please enter your {strname} (Enter 0 to Cancel): ");
