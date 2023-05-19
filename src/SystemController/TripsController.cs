@@ -94,6 +94,7 @@ namespace Train_booking.src.SystemController {
                 Data.RemoveTrip(lst[number - 1].trip_id);
             }
         }
+
         private bool TakeInputString(ref string str, string strname) {
             string? temp;
             Console.Write($"Please enter the trip {strname} (Enter 0 to Cancel): ");

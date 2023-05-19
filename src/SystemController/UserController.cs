@@ -6,9 +6,9 @@ using Train_booking.src.SystemClasses;
 using Train_booking.src.UserClasses;
 namespace Train_booking.src.SystemController {
     public class UserController {
-        public DataManager Data = new DataManager();
-        public TrainsController trainsController = new TrainsController();
-        public TripsController tripsController = new TripsController();
+        private DataManager Data = new DataManager();
+        private TrainsController trainsController = new TrainsController();
+        private TripsController tripsController = new TripsController();
 
         public void RegisterInterface() {
             string name = string.Empty;
@@ -72,7 +72,7 @@ namespace Train_booking.src.SystemController {
             } while (number != 0);
         }
 
-        public void CustomerLogin() {
+        private void CustomerLogin() {
             string username = string.Empty;
             string password = string.Empty;
             if (!TakeInputString(ref username, "Username")) return;
@@ -85,7 +85,7 @@ namespace Train_booking.src.SystemController {
             CustomerInterface(customer);
         }
 
-        public void CustomerInterface(Customer customer) {
+        private void CustomerInterface(Customer customer) {
             int number;
             do {
                 Console.WriteLine("------------------------------------------------");
@@ -113,7 +113,7 @@ namespace Train_booking.src.SystemController {
             } while (number != 0);
         }
 
-        public void AdminLogin() {
+        private void AdminLogin() {
             string username = string.Empty;
             string password = string.Empty;
 
@@ -130,7 +130,7 @@ namespace Train_booking.src.SystemController {
             AdminInterface(admin);
         }
 
-        public void AdminInterface(Admin admin) {
+        private void AdminInterface(Admin admin) {
             int number;
             do {
                 Console.WriteLine("------------------------------------------------");
@@ -260,7 +260,7 @@ namespace Train_booking.src.SystemController {
             return seatList;
         }
 
-        public void ChangeDetails(Customer customer) {
+        private void ChangeDetails(Customer customer) {
             string change = string.Empty;
             int choice;
             do {

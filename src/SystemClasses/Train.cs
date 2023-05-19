@@ -11,7 +11,7 @@ namespace Train_booking.src.SystemClasses {
         public Train(int total_seats) {
             this.total_seats = total_seats;
         }
-        
+
         public override string ToString() {
             return $"{train_id} | {total_seats}";
         }

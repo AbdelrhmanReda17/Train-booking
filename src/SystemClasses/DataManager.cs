@@ -9,25 +9,26 @@ namespace Train_booking.src.SystemClasses {
             SqlConnection con = new SqlConnection(str);
             con.Open();
             Customer? customer = null;
-            string selectCustomerQuery = $"Select * from Customer Where username = '{username}'";
-            using (SqlCommand command = new SqlCommand(selectCustomerQuery, con)) {
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                if (username == reader["username"].ToString() && password == reader["password"].ToString()) {
-                    customer = new Customer();
-                    customer.id = reader.GetInt32(0);
-                    customer.name = reader.GetString(1);
-                    customer.username = reader.GetString(2);
-                    customer.password = reader.GetString(3);
-                    customer.phone = reader.GetString(4);
-                    customer.email = reader.GetString(5);
-                    customer.city = reader.GetString(6);
-                    customer.age = reader.GetInt32(7);
-                    customer.country = reader.GetString(8);
+            try {
+                string selectCustomerQuery = $"Select * from Customer Where username = '{username}'";
+                using (SqlCommand command = new SqlCommand(selectCustomerQuery, con)) {
+                    SqlDataReader reader = command.ExecuteReader();
+                    reader.Read();
+                    if (username == reader["username"].ToString() && password == reader["password"].ToString()) {
+                        customer = new Customer();
+                        customer.id = reader.GetInt32(0);
+                        customer.name = reader.GetString(1);
+                        customer.username = reader.GetString(2);
+                        customer.password = reader.GetString(3);
+                        customer.phone = reader.GetString(4);
+                        customer.email = reader.GetString(5);
+                        customer.city = reader.GetString(6);
+                        customer.age = reader.GetInt32(7);
+                        customer.country = reader.GetString(8);
+                    }
                 }
-            }
-            con.Close();
-
+                con.Close();
+            } catch { }
             return customer;
         }
 
@@ -60,23 +61,26 @@ namespace Train_booking.src.SystemClasses {
             SqlConnection con = new SqlConnection(str);
             con.Open();
             Admin? admin = null;
-            string selectAdminQuery = $"Select * from Admin Where username = '{username}'";
-            using (SqlCommand command = new SqlCommand(selectAdminQuery, con)) {
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                if (username == reader["username"].ToString() && password == reader["password"].ToString()) {
-                    admin = new Admin();
-                    admin.id = reader.GetInt32(0);
-                    admin.name = reader.GetString(1);
-                    admin.username = reader.GetString(2);
-                    admin.password = reader.GetString(3);
-                    admin.phone = reader.GetString(4);
-                    admin.email = reader.GetString(5);
-                    admin.position = reader.GetString(6);
-                    return admin;
+            try {
+                string selectAdminQuery = $"Select * from Admin Where username = '{username}'";
+                using (SqlCommand command = new SqlCommand(selectAdminQuery, con)) {
+                    SqlDataReader reader = command.ExecuteReader();
+                    reader.Read();
+                    if (username == reader["username"].ToString() && password == reader["password"].ToString()) {
+                        admin = new Admin();
+                        admin.id = reader.GetInt32(0);
+                        admin.name = reader.GetString(1);
+                        admin.username = reader.GetString(2);
+                        admin.password = reader.GetString(3);
+                        admin.phone = reader.GetString(4);
+                        admin.email = reader.GetString(5);
+                        admin.position = reader.GetString(6);
+                        reader.Close();
+                        return admin;
+                    }
                 }
-            }
-            con.Close();
+                con.Close();
+            } catch { }
             return admin;
         }
 
@@ -150,33 +154,6 @@ namespace Train_booking.src.SystemClasses {
             }
             Console.WriteLine("Train added successfully.");
             con.Close();
-        }
-
-        public bool CheckTrain(int ts) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
-            con.Open();
-            Boolean isCorrect = true;
-            int bk, tp;
-            string query = $"select COUNT(*) from Booking where train_id = '{ts}'";
-            using (SqlCommand command = new SqlCommand(query, con)) {
-                bk = (int)command.ExecuteScalar();
-                if (bk > 0) {
-                    isCorrect = false;
-                }
-            }
-            query = $"select COUNT(*) from Trip where train_id = '{ts}'";
-            using (SqlCommand command = new SqlCommand(query, con)) {
-                tp = (int)command.ExecuteScalar();
-                if (tp > 0) {
-                    isCorrect = false;
-                }
-            }
-            con.Close();
-            if (isCorrect)
-                return true;
-            else
-                return false;
         }
 
         public void RemoveTrain(int ts) {
@@ -254,7 +231,7 @@ namespace Train_booking.src.SystemClasses {
             con.Close();
         }
 
-        public void CheckTrip(int tp) {
+        private void CheckTrip(int tp) {
             string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
             SqlConnection con = new SqlConnection(str);
             con.Open();
@@ -272,13 +249,13 @@ namespace Train_booking.src.SystemClasses {
 
             if (bk.HasValue) {
                 // Free all seats for the specified booking ID.
-                query = $"UPDATE Seat SET state = 0, booking_id = NULL WHERE booking_id={bk}";
+                query = $"UPDATE Seat SET state = 0, booking_id = NULL WHERE booking_id in (SELECT Booking_id FROM Booking WHERE trip_id={tp})";
                 using (SqlCommand command = new SqlCommand(query, con)) {
                     int result = command.ExecuteNonQuery();
                     if (result < 0) {
                         Console.WriteLine("No seats to free.");
                     } else {
-                        Console.WriteLine("Seats related to this trip has been freed successfully.");
+                        Console.WriteLine("Seats related to this trip have been freed successfully.");
                     }
                 }
 
@@ -289,7 +266,7 @@ namespace Train_booking.src.SystemClasses {
                     if (result < 0) {
                         Console.WriteLine("No booking to delete.");
                     } else {
-                        Console.WriteLine("Booking related to this trip has been deleted successfully.");
+                        Console.WriteLine("Bookings related to this trip have been deleted successfully.");
                     }
                 }
             } else {
@@ -353,7 +330,7 @@ namespace Train_booking.src.SystemClasses {
                 if (result < 0) {
                     Console.WriteLine("No Seats to delete.");
                 } else {
-                    Console.WriteLine("Seats related to this trip has been deleted successfully.");
+                    Console.WriteLine("Seats related to this trip have been deleted successfully.");
                 }
             }
             con.Close();

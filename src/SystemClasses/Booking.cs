@@ -12,7 +12,7 @@ namespace Train_booking.src.SystemClasses {
         public int customer_id;
         public int trip_id;
         public int train_id;
-        
+
         public Booking(int price, int customer_id, int trip_id, int train_id, string tripDate, string booking_time) {
             this.price = price;
             this.customer_id = customer_id;
