@@ -92,7 +92,6 @@ namespace Train_booking.src.SystemController {
                 Console.WriteLine("Hello " + customer.name);
                 Console.WriteLine("1. Book a Trip");
                 Console.WriteLine("2. Update Profile");
-                Console.WriteLine("3. Update Dependents");
                 Console.WriteLine("0. log out");
                 Console.WriteLine("------------------------------------------------");
                 Console.Write("Please select which detail you want to change: ");
@@ -103,9 +102,6 @@ namespace Train_booking.src.SystemController {
                         break;
                     case 2:
                         ChangeDetails(customer);
-                        break;
-                    case 3:
-                        UpdateDependents(customer);
                         break;
                     case 0:
                         Console.WriteLine("Log out Successfully");
@@ -141,10 +137,9 @@ namespace Train_booking.src.SystemController {
                 Console.WriteLine("Hello " + admin.name);
                 Console.WriteLine("1. Add a Trip");
                 Console.WriteLine("2. Remove a Trip");
-                Console.WriteLine("3. Add a Train");
-                Console.WriteLine("4. Remove a Train");
-                //Console.WriteLine("5. Edit a Customer");
-                //Console.WriteLine("6. Remove a Customer");
+                Console.WriteLine("3. Update Trip Details");
+                Console.WriteLine("4. Add a Train");
+                Console.WriteLine("5. Remove a Train");
                 Console.WriteLine("0. log out");
                 Console.WriteLine("------------------------------------------------");
                 Console.Write("Please select which detail you want to change: ");
@@ -157,9 +152,12 @@ namespace Train_booking.src.SystemController {
                         tripsController.Removetrip();
                         break;
                     case 3:
-                        trainsController.AddTrain();
+                        // Update trip
                         break;
                     case 4:
+                        trainsController.AddTrain();
+                        break;
+                    case 5:
                         trainsController.RemoveTrain();
                         break;
                     case 0:
@@ -189,26 +187,77 @@ namespace Train_booking.src.SystemController {
             Console.WriteLine("0. Cancel Booking");
             Console.WriteLine("------------------------------------------------");
             Console.Write("Please select Trip you want to Book: ");
-            
+
             while (!int.TryParse(Console.ReadLine(), out number) || number < 0 || number > tripList.Count) {
                 Console.Write("Please Select a Valid Trip: ");
             }
 
-            if(number == 0) {
+            if (number == 0) {
                 Console.WriteLine("Booking Canceled!");
                 return;
             }
 
-            List<int> availableSeats = Data.GetAvailableSeats(tripList[number - 1].trip_id);
-            if (availableSeats.Count <= 0 || availableSeats == null) {
-                Console.WriteLine("No Available Seats for this Trip!");
+            List<int>? seatList = BookSeats(tripList[number - 1].trip_id);
+
+            if (seatList == null || seatList.Count <= 0) {
+                Console.WriteLine("No Seats Added! Canceling Process!");
                 return;
             }
 
-            // Avaiable Seats for Trip
-            // foreach(int seatno in availableSeats) {
-            //     Console.WriteLine($"| {seatno} |");
-            // }
+            Data.ConfirmBooking(seatList, tripList[number - 1], customer.id);
+        }
+
+        private List<int>? BookSeats(int trip_id) {
+            List<int> seatList = new List<int>();
+            List<int> availableSeats = Data.GetAvailableSeats(trip_id);
+
+            int number;
+            do {
+                if (availableSeats == null || availableSeats.Count <= 0) {
+                    Console.WriteLine("No Available Seats for this Trip!");
+                    break;
+                }
+
+                // Avaiable Seats for Trip
+                foreach (int seatno in availableSeats) {
+                    Console.WriteLine($"| {seatno} |");
+                }
+
+                Console.Write("Please Select the seat number you want to book (Enter 0 to finish Adding seats): ");
+
+                int.TryParse(Console.ReadLine(), out number);
+
+                if (availableSeats.Contains(number)) {
+                    if (seatList.Contains(number)) {
+                        Console.WriteLine("Seat Already Added");
+                    } else {
+                        Console.WriteLine("Seat Added Successfully!");
+                        seatList.Add(number);
+                        availableSeats.Remove(number);
+                    }
+                } else if (number != 0) {
+                    Console.WriteLine("Please pick a valid seat!");
+                }
+            } while (number != 0);
+
+            if (seatList == null || seatList.Count <= 0) {
+                Console.WriteLine("No Seats Added! Canceling Process!");
+                return null;
+            }
+
+            int temp;
+            Console.WriteLine("1) Confirm Booking\n0) Cancel Booking");
+            int.TryParse(Console.ReadLine(), out temp);
+            while (temp != 0 || temp != 1) {
+                if (temp == 0) return null;
+                if (temp == 1) break;
+
+                Console.WriteLine("Please Input A valid number!");
+                Console.WriteLine("1) Confirm Booking\n0) Cancel Booking");
+                int.TryParse(Console.ReadLine(), out temp);
+            }
+
+            return seatList;
         }
 
         public void ChangeDetails(Customer customer) {
@@ -264,10 +313,6 @@ namespace Train_booking.src.SystemController {
             if (change != string.Empty) {
                 Data.UpdateCustomer(customer);
             }
-        }
-
-        private void UpdateDependents(Customer customer) {
-            throw new NotImplementedException();
         }
 
         private bool TakeInputString(ref string str, string strname) {

@@ -5,21 +5,23 @@ using System.Threading.Tasks;
 
 namespace Train_booking.src.SystemClasses {
     public class Trip {
-        public int trip_id;
-        public string source;
-        public string destination;
-        public int train_id;
-        public decimal price;
+        public int trip_id { get; set; }
+        public string source { get; set; }
+        public string destination { get; set; }
+        public int train_id { get; set; }
+        public string tripDate { get; set; }
+        public double price { get; set; }
 
-        public Trip(string source, string destination, int train_id, decimal price) {
+        public Trip(string source, string destination, int train_id, double price, string tripDate) {
             this.source = source;
             this.destination = destination;
             this.train_id = train_id;
             this.price = price;
+            this.tripDate = tripDate;
         }
 
         public override string ToString() {
-            return $"{trip_id} | {source} | {destination} | {train_id} | {price}";
+            return $"{source} | {destination} | {price} | {train_id}";
         }
     }
 }

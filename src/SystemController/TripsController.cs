@@ -11,27 +11,28 @@ namespace Train_booking.src.SystemController {
         public void Addtrip() {
             string source = string.Empty;
             string destination = string.Empty;
-            decimal price;
+            double price;
             if (!TakeInputString(ref source, "source")) return;
             if (!TakeInputString(ref destination, "destination")) return;
             if (source == destination) {
                 Console.WriteLine("Source cannot be equal to destination !");
                 Addtrip();
+                return;
             }
             Console.Write($"Please enter the trip price (Enter 0 to Cancel): ");
-            decimal.TryParse(Console.ReadLine(), out price);
+            double.TryParse(Console.ReadLine(), out price);
             while (price < 0) {
                 if (price == 0) {
                     return;
                 } else {
                     Console.WriteLine("Invaild input please enter again: ");
-                    decimal.TryParse(Console.ReadLine(), out price);
+                    double.TryParse(Console.ReadLine(), out price);
                 }
             }
             List<Train>? lst = Data.GetTrains();
             if (lst != null && lst.Count > 0) {
                 Console.WriteLine("------------------------------------------------");
-                Console.WriteLine("ID | Total Number Of Seats");
+                Console.WriteLine("Train ID | Total Number Of Seats");
                 for (int i = 1; i <= lst.Count; i++) {
                     string outputString = $" {i} | {lst[i - 1].total_seats}";
                     Console.WriteLine(outputString);
@@ -48,10 +49,21 @@ namespace Train_booking.src.SystemController {
                     Console.WriteLine("Invaild input please enter again: ");
                     int.TryParse(Console.ReadLine(), out number);
                 }
-                Trip tp = new Trip(source, destination, lst[number - 1].train_id, price);
+
+                int month, day;
+                Console.Write("Please Enter the Day of the trip: ");
+                while (!int.TryParse(Console.ReadLine(), out day) || day <= 0 || day > 31) {
+                    Console.Write("Invalid day! Please Enter a valid Day: ");
+                }
+                Console.Write("Please Enter the Month of the trip: ");
+                while (!int.TryParse(Console.ReadLine(), out month) || month <= 0 || month > 12) {
+                    Console.Write("Invalid day! Please Enter a valid Month: ");
+                }
+
+                Trip tp = new Trip(source, destination, lst[number - 1].train_id, price, $"{DateTime.Now.Year}-{month}-{day}");
                 Data.AddTrip(tp);
             } else {
-                Console.WriteLine("Due to no trains availabe , Trip add operation is canceled ");
+                Console.WriteLine("Due to no trains availabe, Trip add operation is canceled ");
                 return;
             }
         }
