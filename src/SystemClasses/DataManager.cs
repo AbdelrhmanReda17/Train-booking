@@ -4,9 +4,9 @@ using Train_booking.src.UserClasses;
 
 namespace Train_booking.src.SystemClasses {
     public class DataManager {
+        private static string str = "Server=104.155.147.34; Initial Catalog=Train-Booking; User ID=sqlserver; Password=12345678;";
+        private SqlConnection con = new SqlConnection(str);
         public Customer? GetCustomer(string username, string password) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             Customer? customer = null;
             try {
@@ -33,32 +33,27 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public void UpdateCustomer(Customer customer) {
-            string connectionString = "Server=DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog=Train-Booking; Integrated Security=true;";
-            using (SqlConnection connection = new SqlConnection(connectionString)) {
-                connection.Open();
-                string updateCustomerQuery = "UPDATE CUSTOMER SET name = @name, password = @password, email = @email, "
-                    + $"phone_number = @phone, country = @country, city = @city WHERE username = '{customer.username}'";
-                using (SqlCommand command = new SqlCommand(updateCustomerQuery, connection)) {
-                    command.Parameters.AddWithValue("@name", customer.name);
-                    command.Parameters.AddWithValue("@password", customer.password);
-                    command.Parameters.AddWithValue("@email", customer.email);
-                    command.Parameters.AddWithValue("@phone", customer.phone);
-                    command.Parameters.AddWithValue("@country", customer.country);
-                    command.Parameters.AddWithValue("@city", customer.city);
-                    int result = command.ExecuteNonQuery();
-                    if (result < 0) {
-                        Console.WriteLine("Error updating data in the database!");
-                    } else {
-                        Console.WriteLine("Customer details updated successfully.");
-                    }
+            con.Open();
+            string updateCustomerQuery = "UPDATE CUSTOMER SET name = @name, password = @password, email = @email, "
+                + $"phone_number = @phone, country = @country, city = @city WHERE username = '{customer.username}'";
+            using (SqlCommand command = new SqlCommand(updateCustomerQuery, con)) {
+                command.Parameters.AddWithValue("@name", customer.name);
+                command.Parameters.AddWithValue("@password", customer.password);
+                command.Parameters.AddWithValue("@email", customer.email);
+                command.Parameters.AddWithValue("@phone", customer.phone);
+                command.Parameters.AddWithValue("@country", customer.country);
+                command.Parameters.AddWithValue("@city", customer.city);
+                int result = command.ExecuteNonQuery();
+                if (result < 0) {
+                    Console.WriteLine("Error updating data in the database!");
+                } else {
+                    Console.WriteLine("Customer details updated successfully.");
                 }
-                connection.Close();
             }
+            con.Close();
         }
 
         public Admin? GetAdmin(string username, string password) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             Admin? admin = null;
             try {
@@ -85,8 +80,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public bool AddCustomer(Customer customer) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             int ch = 0;
             string query = $"Select COUNT(username) from customer where username = '{customer.username}'";
@@ -121,8 +114,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public void AddTrain(int ts) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             string query = "insert into Train(total_seats) values (@total_seats)";
             using (SqlCommand command = new SqlCommand(query, con)) {
@@ -138,8 +129,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public void RemoveTrain(int ts) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             string query = $"Delete from Train where train_id={ts}";
             using (SqlCommand command = new SqlCommand(query, con)) {
@@ -154,8 +143,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public List<Train> GetTrains() {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             List<Train> lst = new List<Train>();  // Instantiate the list
             con.Open();
             string query = "Select * from Train";
@@ -175,8 +162,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public void AddTrip(Trip tp) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             string query = "insert into Trip(source, destination, price, trip_date, train_id) values (@source , @destination, @price, @trip_date, @train_id)";
             using (SqlCommand command = new SqlCommand(query, con)) {
@@ -224,8 +209,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public void RemoveTrip(int tp) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             CheckTrip(tp);
             con.Open();
             string query = $"Delete from Trip where trip_id={tp}";
@@ -241,8 +224,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         private void CheckTrip(int tp) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
 
             string query = $"DELETE FROM Seat WHERE trip_id = {tp}";
@@ -264,13 +245,11 @@ namespace Train_booking.src.SystemClasses {
                     Console.WriteLine("Booking deleted successfully.");
                 }
             }
-            
+
             con.Close();
         }
 
         public List<Trip> GetTrips() {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             List<Trip> lst = new List<Trip>();  // Instantiate the list
             con.Open();
             string query = "Select * from Trip";
@@ -294,8 +273,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public List<int> GetTripsRelatedToTrain(int train_id) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             List<int> tripIDList = new List<int>();  // Instantiate the list
             con.Open();
             string query = $"Select * from Trip Where train_id = {train_id}";
@@ -313,8 +290,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public void RemoveSeats(int train_id) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
 
             string query = $"DELETE FROM Seat WHERE Train_train_id={train_id}";
@@ -330,8 +305,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public List<int> GetAvailableSeats(int trip_id) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             List<int> seatIDList = new List<int>();  // Instantiate the list
             con.Open();
             string query = $"Select s.* from Seat s JOIN Trip t ON s.Train_train_id = t.train_id where s.state = 0 and t.trip_id = {trip_id}";
@@ -349,8 +322,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public void ConfirmBooking(List<int> seatList, Trip trip, int customerID) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             string query = "insert into Booking(price, booking_time, trip_date, customer_id, trip_id, train_id) values (@price , @booking_time, @trip_date, @customer_id, @trip_id, @train_id)";
             using (SqlCommand command = new SqlCommand(query, con)) {
@@ -377,8 +348,6 @@ namespace Train_booking.src.SystemClasses {
         }
 
         public int GetLeastSeatID(int trip_id) {
-            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
-            SqlConnection con = new SqlConnection(str);
             con.Open();
             int leastID;
             string query = $"SELECT Min(Seat_id) from Seat where Trip_id = {trip_id}";

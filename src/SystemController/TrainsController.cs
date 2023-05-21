@@ -10,17 +10,16 @@ namespace Train_booking.src.SystemController {
 
         public void AddTrain() {
             int number;
-            Console.WriteLine("Please enter the number of the seats of the Train ( 0 to cancel ) :");
+            Console.Write("Please enter the number of the seats of the Train (0 to cancel) :");
             int.TryParse(Console.ReadLine(), out number);
-            while (number <= 0) {
+            while (number <= 20) {
                 if (number == 0) {
                     Console.WriteLine("Operation Canceled");
                     return;
                 }
-                Console.WriteLine("Invaild input please enter again: ");
+                Console.Write("Invalid input please enter a number greater than 20: ");
                 int.TryParse(Console.ReadLine(), out number);
             }
-            //Data.AddSeats()
             Data.AddTrain(number);
         }
 
@@ -41,7 +40,7 @@ namespace Train_booking.src.SystemController {
                         Console.WriteLine("Operation Canceled");
                         return;
                     }
-                    Console.Write("Invaild input please enter again: ");
+                    Console.Write("Invalid input please enter again: ");
                 }
 
                 // Select all trips related to this train and remove them
