@@ -137,9 +137,8 @@ namespace Train_booking.src.SystemController {
                 Console.WriteLine("Hello " + admin.name);
                 Console.WriteLine("1. Add a Trip");
                 Console.WriteLine("2. Remove a Trip");
-                Console.WriteLine("3. Update Trip Details");
-                Console.WriteLine("4. Add a Train");
-                Console.WriteLine("5. Remove a Train");
+                Console.WriteLine("3. Add a Train");
+                Console.WriteLine("4. Remove a Train");
                 Console.WriteLine("0. log out");
                 Console.WriteLine("------------------------------------------------");
                 Console.Write("Please select which detail you want to change: ");
@@ -152,12 +151,9 @@ namespace Train_booking.src.SystemController {
                         tripsController.Removetrip();
                         break;
                     case 3:
-                        // Update trip
-                        break;
-                    case 4:
                         trainsController.AddTrain();
                         break;
-                    case 5:
+                    case 4:
                         trainsController.RemoveTrain();
                         break;
                     case 0:
@@ -208,8 +204,13 @@ namespace Train_booking.src.SystemController {
         }
 
         private List<int>? BookSeats(int trip_id) {
+            int leastSeatID = Data.GetLeastSeatID(trip_id);
             List<int> seatList = new List<int>();
             List<int> availableSeats = Data.GetAvailableSeats(trip_id);
+            for (int i = 0; i < availableSeats.Count;i++)
+                availableSeats[i] = availableSeats[i] - leastSeatID + 1;
+
+
 
             int number;
             do {
@@ -226,13 +227,13 @@ namespace Train_booking.src.SystemController {
                 Console.Write("Please Select the seat number you want to book (Enter 0 to finish Adding seats): ");
 
                 int.TryParse(Console.ReadLine(), out number);
-
+                
                 if (availableSeats.Contains(number)) {
-                    if (seatList.Contains(number)) {
+                    if (seatList.Contains(number + leastSeatID - 1)) {
                         Console.WriteLine("Seat Already Added");
                     } else {
                         Console.WriteLine("Seat Added Successfully!");
-                        seatList.Add(number);
+                        seatList.Add(number + leastSeatID - 1);
                         availableSeats.Remove(number);
                     }
                 } else if (number != 0) {

@@ -133,25 +133,6 @@ namespace Train_booking.src.SystemClasses {
                 }
             }
 
-            int trainID;
-            query = "select max(train_id) from Train";
-            using (SqlCommand command = new SqlCommand(query, con)) {
-                SqlDataReader reader = command.ExecuteReader();
-                reader.Read();
-                trainID = reader.GetInt32(0);
-                reader.Close();
-            }
-            query = "insert into Seat(state, Train_train_id) values(@state, @trainID)";
-            for (int i = 1; i <= ts; i++) {
-                using (SqlCommand command = new SqlCommand(query, con)) {
-                    command.Parameters.AddWithValue("@state", 0);
-                    command.Parameters.AddWithValue("@trainID", trainID);
-                    int result = command.ExecuteNonQuery();
-                    if (result < 0) {
-                        Console.WriteLine("Error inserting data into Database!");
-                    }
-                }
-            }
             Console.WriteLine("Train added successfully.");
             con.Close();
         }
@@ -197,7 +178,7 @@ namespace Train_booking.src.SystemClasses {
             string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
             SqlConnection con = new SqlConnection(str);
             con.Open();
-            string query = "insert into Trip(source, destination, price, trip_date, train_id) values (@source , @destination, @price, @trip_date,@train_id)";
+            string query = "insert into Trip(source, destination, price, trip_date, train_id) values (@source , @destination, @price, @trip_date, @train_id)";
             using (SqlCommand command = new SqlCommand(query, con)) {
                 command.Parameters.AddWithValue("@source", tp.source);
                 command.Parameters.AddWithValue("@destination", tp.destination);
@@ -209,6 +190,34 @@ namespace Train_booking.src.SystemClasses {
                     Console.WriteLine("Error inserting data into Database!");
                 } else {
                     Console.WriteLine("Trip added successfully.");
+                }
+            }
+
+            int trip_id;
+            query = "SELECT MAX(trip_id) FROM Trip";
+            using (SqlCommand command = new SqlCommand(query, con)) {
+                trip_id = Convert.ToInt32(command.ExecuteScalar());
+            }
+
+            int seatNo;
+            query = $"SELECT total_seats FROM Train WHERE train_id = {tp.train_id}";
+            using (SqlCommand command = new SqlCommand(query, con)) {
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                seatNo = reader.GetInt32(0);
+                reader.Close();
+            }
+
+            query = "INSERT INTO Seat (state, Train_train_id, trip_id) VALUES (@state, @trainID, @trip_id)";
+            for (int i = 1; i <= seatNo; i++) {
+                using (SqlCommand command = new SqlCommand(query, con)) {
+                    command.Parameters.AddWithValue("@state", 0);
+                    command.Parameters.AddWithValue("@trainID", tp.train_id);
+                    command.Parameters.AddWithValue("@trip_id", trip_id);
+                    int result = command.ExecuteNonQuery();
+                    if (result < 0) {
+                        Console.WriteLine("Error inserting data into Database!");
+                    }
                 }
             }
             con.Close();
@@ -223,7 +232,7 @@ namespace Train_booking.src.SystemClasses {
             using (SqlCommand command = new SqlCommand(query, con)) {
                 int result = command.ExecuteNonQuery();
                 if (result < 0) {
-                    Console.WriteLine("Error delating data into Database!");
+                    Console.WriteLine("Error deleting data into Database!");
                 } else {
                     Console.WriteLine("Trip deleted successfully.");
                 }
@@ -236,42 +245,26 @@ namespace Train_booking.src.SystemClasses {
             SqlConnection con = new SqlConnection(str);
             con.Open();
 
-            // Get the booking ID for the specified trip.
-            int? bk = null;
-            string query = $"SELECT Booking_id FROM Booking WHERE trip_id={tp}";
+            string query = $"DELETE FROM Seat WHERE trip_id = {tp}";
             using (SqlCommand command = new SqlCommand(query, con)) {
-                object result = command.ExecuteScalar();
-                if (result != null && int.TryParse(result.ToString(), out int bookingId)) {
-                    bk = bookingId;
+                int result = command.ExecuteNonQuery();
+                if (result < 0) {
+                    Console.WriteLine("Error deleting data into Database!");
+                } else {
+                    Console.WriteLine("Seats deleted successfully.");
                 }
             }
 
-
-            if (bk.HasValue) {
-                // Free all seats for the specified booking ID.
-                query = $"UPDATE Seat SET state = 0, booking_id = NULL WHERE booking_id in (SELECT Booking_id FROM Booking WHERE trip_id={tp})";
-                using (SqlCommand command = new SqlCommand(query, con)) {
-                    int result = command.ExecuteNonQuery();
-                    if (result < 0) {
-                        Console.WriteLine("No seats to free.");
-                    } else {
-                        Console.WriteLine("Seats related to this trip have been freed successfully.");
-                    }
+            query = $"DELETE FROM Booking WHERE trip_id={tp}";
+            using (SqlCommand command = new SqlCommand(query, con)) {
+                int result = command.ExecuteNonQuery();
+                if (result < 0) {
+                    Console.WriteLine("Error delating data into Database!");
+                } else {
+                    Console.WriteLine("Booking deleted successfully.");
                 }
-
-                // Delete all booking that is related to this trip
-                query = $"DELETE FROM Booking WHERE trip_id={tp}";
-                using (SqlCommand command = new SqlCommand(query, con)) {
-                    int result = command.ExecuteNonQuery();
-                    if (result < 0) {
-                        Console.WriteLine("No booking to delete.");
-                    } else {
-                        Console.WriteLine("Bookings related to this trip have been deleted successfully.");
-                    }
-                }
-            } else {
-                Console.WriteLine("No booking found for the specified trip ID.");
             }
+            
             con.Close();
         }
 
@@ -381,6 +374,23 @@ namespace Train_booking.src.SystemClasses {
                 command.ExecuteNonQuery();
             }
             con.Close();
+        }
+
+        public int GetLeastSeatID(int trip_id) {
+            string str = "Server = DESKTOP-FUGQNF4\\DB_SQL; Initial Catalog = Train-Booking; Integrated Security = true;";
+            SqlConnection con = new SqlConnection(str);
+            con.Open();
+            int leastID;
+            string query = $"SELECT Min(Seat_id) from Seat where Trip_id = {trip_id}";
+            using (SqlCommand command = new SqlCommand(query, con)) {
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                leastID = reader.GetInt32(0);
+                reader.Close();
+            }
+            con.Close();
+
+            return leastID;
         }
     }
 }
